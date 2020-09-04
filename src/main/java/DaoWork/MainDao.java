@@ -3,6 +3,7 @@ package DaoWork;
 import pl.coderslab.entity.UserDao;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class MainDao {
     public static void main(String[] args) {
@@ -21,12 +22,10 @@ public class MainDao {
         DbUtil.create(create);
 
         UserDao userDao = new UserDao();
-        User read = userDao.read(1);
-        UserDao.showReadResult(read);
-        User update = userDao.read(1);
-        update.setUser("adas93");
-        userDao.update(update);
+        UserDao.readAllUsers(userDao);
     }
+
+
 
 
 }
