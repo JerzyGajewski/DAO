@@ -3,7 +3,6 @@ package DaoWork;
 import pl.coderslab.entity.UserDao;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 
 public class MainDao {
     public static void main(String[] args) {
@@ -22,10 +21,29 @@ public class MainDao {
         DbUtil.create(create);
 
         UserDao userDao = new UserDao();
-        UserDao.readAllUsers(userDao);
+        showReadResult(userDao.read(1));
+        readAllUsers(userDao);
+        userDao.deleteUser(1);
+
+
+
+
+
     }
 
 
 
+    public static void showReadResult(User read) {
+        if (read == null) {
+            System.out.println("Wrong id");
+        } else
+            System.out.println(read.getId() + " " + read.getEmail() + " " + read.getUser() + " " + read.getPassword());
+    }
 
+    public static void readAllUsers(UserDao userDao) {
+        User[] all = userDao.readAll();
+        for (int i = 0; i < all.length; i++) {
+            System.out.println(all[i].getId() + " " + all[i].getEmail() + " " + all[i].getUser() + " " + all[i].getPassword());
+        }
+    }
 }

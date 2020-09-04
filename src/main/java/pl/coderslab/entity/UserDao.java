@@ -12,6 +12,7 @@ public class UserDao {
     private static final String CHANGE_USER_DATA_QUERRY = "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?";
     private static final String READ_USER_DATA_QUERRY = "SELECT * FROM users WHERE id = ?";
     private static final String FIND_ALL_QUERRY = "SELECT * FROM users";
+    private static final String DELETE_USER_QUERRY = "DELETE FROM users WHERE id = ?";
 
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
@@ -56,13 +57,6 @@ public class UserDao {
 
     }
 
-    public static void showReadResult(User read) {
-        if (read == null) {
-            System.out.println("Wrong id");
-        } else
-            System.out.println(read.getId() + " " + read.getEmail() + " " + read.getUser() + " " + read.getPassword());
-    }
-
     public void update(User user) {
         try (Connection conn = DbUtil.connect();
              PreparedStatement statement = conn.prepareStatement(CHANGE_USER_DATA_QUERRY)) {
@@ -76,7 +70,7 @@ public class UserDao {
         }
     }
 
-    private User[] readAll() {
+    public User[] readAll() {
         try (Connection conn = DbUtil.connect();
              PreparedStatement statement = conn.prepareStatement(FIND_ALL_QUERRY)) {
             User[] arr = new User[0];
@@ -100,10 +94,15 @@ public class UserDao {
         tmpUsers[tmpUsers.length -1] = u;
         return tmpUsers;
     }
-    public static void readAllUsers(UserDao userDao) {
-        User[] all = userDao.readAll();
-        for (int i = 0; i < all.length; i++) {
-            System.out.println(all[i].getId() + " " + all[i].getEmail() + " " + all[i].getUser() + " " + all[i].getPassword());
+    public void deleteUser(int userId){
+
+        try (Connection conn = DbUtil.connect();
+             PreparedStatement statement = conn.prepareStatement(DELETE_USER_QUERRY)){
+            statement.setInt(1,userId);
+            statement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
         }
+
     }
 }
